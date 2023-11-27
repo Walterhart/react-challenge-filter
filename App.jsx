@@ -62,11 +62,39 @@ This company wants to spy on its employees. Your task is to help them do the fol
        be changed.
 */
 
-
+  // checks if text includes "Evil Corp."
+  const isInfractionDetected = (text) =>{
+    return text.includes("Evil Corp.")
+  }
+  
+  // Replace "Evil" with "Good"
+  const correctTerm = (text) => {
+     const newText = text.split(" ").map(word=> {
+       return  word === "Evil"?  "Good" : `${word}`
+     })
+     return newText.join(" ")
+  }
+  
+  const handleOnChange= (event) =>{
+    
+    const {value} = event.target
+    let text = value
+    
+    const infractionDetected = isInfractionDetected(text)
+    if(infractionDetected){
+      text = correctTerm(text)
+    }
+    setUserInput(text)
+    
+    setTrackingReports(prev =>{
+      return [...prev, {timestamp: getTimeStamp(), employeeInput: value, infractionDetected}]
+    })
+  }
+  
   return (
     <div>
       <Header />
-      <textarea placeholder="Write your report here..." />
+      <textarea placeholder="Write your report here..." onChange={handleOnChange}  value={userInput}/>
     </div>
   )
 }
